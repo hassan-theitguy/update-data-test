@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Log</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+    li {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
 
+<h1>Data Entries</h1>
+<ul id="list"></ul>
+
+<script>
+async function loadData() {
+  const res = await fetch("data.json");
+  const data = await res.json();
+
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  data.reverse().forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.appendChild(li);
+  });
+}
+
+loadData();
+</script>
+
+</body>
+</html>
