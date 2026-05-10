@@ -1,1 +1,34 @@
+name: Add Timestamp Entry
 
+on:
+  workflow_dispatch:
+
+jobs:
+  add-entry:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Add timestamp
+        run: |
+          node -e "
+          const fs = require('fs');
+          const file = 'docs/data.json';
+
+          const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+
+          data.push(new Date().toISOString());
+
+          fs.writeFileSync(file, JSON.stringify(data, null, 2));
+          "
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add docs/data.json
+          git commit -m "Add timestamp entry" || exit 0
+          git push
